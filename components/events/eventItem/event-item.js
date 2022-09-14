@@ -10,7 +10,7 @@ import styles from "./event-item.module.css";
 function EventItem(props) {
   const { id, title, image, date, location } = props;
 
-  const readableDate = new Date(date).toLocaleDateString("ru-RU", {
+  const readableDate = new Date(date).toLocaleDateString("en-US", {
     day: "numeric",
     month: "long",
     year: "numeric",
