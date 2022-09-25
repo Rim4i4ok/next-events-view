@@ -6,13 +6,10 @@ import EventLogistics from "../../components/event-detail/event-logistics";
 import EventContent from "../../components/event-detail/event-content";
 import ErrorAlert from "../../components/ui/errorAlert/error-alert";
 
-import { getEventById } from "../../dummy-data";
+import { getEventById, getAllEvents } from "../../helpers/api-util";
 
-function EventsDetailPage() {
-  const router = useRouter();
-
-  const eventId = router.query.id;
-  const event = getEventById(eventId);
+function EventsDetailPage(props) {
+  const event = props.selectedEvent;
 
   if (!event) {
     return (
@@ -36,6 +33,26 @@ function EventsDetailPage() {
       </EventContent>
     </Fragment>
   );
+}
+
+export async function getStaticProps(context) {
+  const eventId = context.params.id;
+
+  const event = await getEventById(eventId);
+
+  return {
+    props: {
+      selectedEvent: event,
+    },
+  };
+}
+
+export async function getStaticPaths() {
+  const events = await getAllEvents();
+
+  const paths = events.map((event) => ({ params: { id: event.id } }));
+
+  return { paths: paths, fallback: false };
 }
 
 export default EventsDetailPage;
