@@ -22,11 +22,22 @@ function FilteredEventsPage(props) {
     );
   }
 
+  const pageHead = (
+    <Head>
+      <title>FilteredEvents</title>
+      <meta
+        name="description"
+        content={`All events for ${props.date.month}/${props.date.year}`}
+      />
+    </Head>
+  );
+
   const filteredEvents = props.events;
 
   if (!filteredEvents || filteredEvents.length === 0) {
     return (
       <Fragment>
+        {pageHead}
         <ErrorAlert>
           <p>No events found</p>
         </ErrorAlert>
@@ -41,13 +52,7 @@ function FilteredEventsPage(props) {
 
   return (
     <Fragment>
-      <Head>
-        <title>FilteredEvents</title>
-        <meta
-          name="description"
-          content={`All events for ${props.date.month}/${props.date.year}`}
-        />
-      </Head>
+      {pageHead}
       <ResultsTitle date={date} />
       <EventList items={filteredEvents} />
     </Fragment>
