@@ -4,7 +4,7 @@ function handler(req, res) {
 
     // some validdation
     if (!userEmail || !userEmail.includes("@")) {
-      req.status(422).json({ message: "Invalid email address" });
+      res.status(422).json({ message: "Invalid email address" });
       return;
     }
 
