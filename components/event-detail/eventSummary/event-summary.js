@@ -1,6 +1,6 @@
-import classes from './event-summary.module.css';
+import classes from "./event-summary.module.css";
 
-function EventSummary(props) {
+export default function EventSummary(props) {
   const { title } = props;
 
   return (
@@ -9,5 +9,3 @@ function EventSummary(props) {
     </section>
   );
 }
-
-export default EventSummary;

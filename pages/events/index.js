@@ -1,12 +1,12 @@
-import Head from "next/head";
-import { useRouter } from "next/router";
 import { Fragment } from "react";
+import { useRouter } from "next/router";
+import Head from "next/head";
 
+import { getAllEvents } from "../../helpers/api-util";
 import EventList from "../../components/events/eventList/event-list";
 import EventsSearch from "../../components/events/eventsSearch/events-search";
-import { getAllEvents } from "../../helpers/api-util";
 
-function EventsPage(props) {
+function AllEventsPage(props) {
   const router = useRouter();
   const { events } = props;
 
@@ -19,8 +19,14 @@ function EventsPage(props) {
   return (
     <Fragment>
       <Head>
-        <title>All events</title>
-        <meta name="description" content="Hello world with events" />
+        <title>All my events</title>
+      </Head>
+      <Head>
+        <title>All Events</title>
+        <meta
+          name="description"
+          content="Find a lot of great events that allow you to evolve..."
+        />
       </Head>
       <EventsSearch onSearch={findEventsHandler} />
       <EventList items={events} />
@@ -39,4 +45,4 @@ export async function getStaticProps() {
   };
 }
 
-export default EventsPage;
+export default AllEventsPage;

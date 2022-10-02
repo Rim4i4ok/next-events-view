@@ -1,10 +1,11 @@
-import AddressIcon from "../icons/address-icon";
-import DateIcon from "../icons/date-icon";
-import LogisticsItem from "./logistics-item";
-import classes from "./event-logistics.module.css";
 import Image from "next/image";
 
-function EventLogistics(props) {
+import AddressIcon from "../../icons/address-icon";
+import DateIcon from "../../icons/date-icon";
+import LogisticsItem from "../logisticItem/logistics-item";
+import classes from "./event-logistics.module.css";
+
+export default function EventLogistics(props) {
   const { date, address, image, imageAlt } = props;
 
   const humanReadableDate = new Date(date).toLocaleDateString("en-US", {
@@ -30,5 +31,3 @@ function EventLogistics(props) {
     </section>
   );
 }
-
-export default EventLogistics;

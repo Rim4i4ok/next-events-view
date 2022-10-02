@@ -1,7 +1,7 @@
-import Button from "../../ui/button";
+import Button from "../../ui/button/button";
 import classes from "./results-title.module.css";
 
-function ResultsTitle(props) {
+export default function ResultsTitle(props) {
   const { date } = props;
 
   const humanReadableDate = new Date(date).toLocaleDateString("en-US", {
@@ -16,5 +16,3 @@ function ResultsTitle(props) {
     </section>
   );
 }
-
-export default ResultsTitle;

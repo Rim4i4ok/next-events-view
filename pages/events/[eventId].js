@@ -1,13 +1,13 @@
 import Head from "next/head";
 import { Fragment } from "react";
 
-import EventContent from "../../components/event-detail/event-content";
-import EventLogistics from "../../components/event-detail/event-logistics";
-import EventSummary from "../../components/event-detail/event-summary";
-
+import EventContent from "../../components/event-detail/eventContent/event-content";
+import EventLogistics from "../../components/event-detail/eventLogistics/event-logistics";
+import EventSummary from "../../components/event-detail/eventSummary/event-summary";
+import Comments from "../../components/input/comments/comments";
 import { getEventById, getFeaturedEvents } from "../../helpers/api-util";
 
-function EventsDetailPage(props) {
+function EventDetailPage(props) {
   const event = props.selectedEvent;
 
   if (!event) {
@@ -34,12 +34,13 @@ function EventsDetailPage(props) {
       <EventContent>
         <p>{event.description}</p>
       </EventContent>
+      <Comments eventId={event.id} />
     </Fragment>
   );
 }
 
 export async function getStaticProps(context) {
-  const eventId = context.params.id;
+  const eventId = context.params.eventId;
 
   const event = await getEventById(eventId);
 
@@ -54,7 +55,7 @@ export async function getStaticProps(context) {
 export async function getStaticPaths() {
   const events = await getFeaturedEvents();
 
-  const paths = events.map((event) => ({ params: { id: event.id } }));
+  const paths = events.map((event) => ({ params: { eventId: event.id } }));
 
   return {
     paths: paths,
@@ -62,4 +63,4 @@ export async function getStaticPaths() {
   };
 }
 
-export default EventsDetailPage;
+export default EventDetailPage;
