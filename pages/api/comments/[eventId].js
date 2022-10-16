@@ -29,9 +29,7 @@ async function handler(req, res) {
       eventId: eventId,
     };
 
-    const result = await db
-      .collection(COLLECTION)
-      .insertOne({ comment: newComment });
+    const result = await db.collection(COLLECTION).insertOne(newComment);
 
     console.log("new comment", result);
 
@@ -43,7 +41,7 @@ async function handler(req, res) {
   if (req.method === "GET") {
     const documents = await db
       .collection(COLLECTION)
-      .find()
+      .find({ eventId: eventId })
       .sort({ _id: -1 })
       .toArray();
 
