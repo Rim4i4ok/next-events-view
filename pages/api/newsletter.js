@@ -1,4 +1,6 @@
-import { connectToDb } from "../../helpers/mongodb-utils";
+import { connectToDb, insertDocument } from "../../helpers/mongodb-utils";
+
+const COLLECTION = "emails";
 
 async function handler(req, res) {
   console.log("hello");
@@ -12,8 +14,12 @@ async function handler(req, res) {
     }
 
     const { client, db } = await connectToDb("newsletter");
-
-    await db.collection("emails").insertOne({ email: userEmail });
+    try {
+      await insertDocument(db, COLLECTION, { email: userEmail });
+    } catch (exception) {
+      res.status(500).json({ message: "Insert data failed." });
+      console.log("error", exception);
+    }
 
     client.close();
 

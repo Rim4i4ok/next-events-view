@@ -8,3 +8,11 @@ export async function connectToDb(dbName) {
 
   return { client, db };
 }
+
+export async function insertDocument(db, collection, document) {
+  return await db.collection(collection).insertOne(document);
+}
+
+export async function getAllDocuments(db, collection, sort) {
+  return await db.collection(collection).find().toArray();
+}

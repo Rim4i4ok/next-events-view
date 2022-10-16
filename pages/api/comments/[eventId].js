@@ -1,11 +1,15 @@
-import { connectToDb } from "../../../helpers/mongodb-utils";
+import {
+  connectToDb,
+  insertDocument,
+  getAllDocuments,
+} from "../../../helpers/mongodb-utils";
 
 const COLLECTION = "comments";
 
 async function handler(req, res) {
   const eventId = req.query.eventId;
 
-  const { client, db } = await connectToDb("events");
+  const { client, db } = await connectToDb("newsletter");
 
   if (req.method === "POST") {
     const { email, name, text } = req.body;
@@ -29,21 +33,23 @@ async function handler(req, res) {
       eventId: eventId,
     };
 
-    const result = await db.collection(COLLECTION).insertOne(newComment);
+    try {
+      const result = insertDocument(db, COLLECTION, newComment);
+      console.log("new comment", result);
+      newComment._id = result.insertedId;
+    } catch (exception) {
+      res.status(500).json({ message: "Insert data failed." });
+      console.log("error", exception);
+      return;
+    }
 
-    console.log("new comment", result);
+    client.close();
 
-    newComment.id = result.insertedId;
-
-    res.status(201).json({ message: "Added comment", comment: result });
+    res.status(201).json({ message: "Added comment", comment: newComment });
   }
 
   if (req.method === "GET") {
-    const documents = await db
-      .collection(COLLECTION)
-      .find({ eventId: eventId })
-      .sort({ _id: -1 })
-      .toArray();
+    const documents = await getAllDocuments(db, COLLECTION);
 
     res.status(200).json({ comments: documents });
   }
