@@ -1,4 +1,7 @@
-function handler(req, res) {
+import { connectToDb } from "../../helpers/mongodb-utils";
+
+async function handler(req, res) {
+  console.log("hello");
   if (req.method === "POST") {
     const userEmail = req.body.email;
 
@@ -8,7 +11,13 @@ function handler(req, res) {
       return;
     }
 
-    console.log("API call ", userEmail);
+    const { client, db } = await connectToDb("newsletter");
+
+    await db.collection("emails").insertOne({ email: userEmail });
+
+    client.close();
+
+    // console.log("API call ", userEmail);
     res.status(201).json({ message: "Signed" });
   }
 }

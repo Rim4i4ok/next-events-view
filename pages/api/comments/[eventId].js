@@ -1,5 +1,9 @@
-function handler(req, res) {
-  const requestId = req.query.requestId;
+import { connectToDb } from "../../../helpers/mongodb-utils";
+
+async function handler(req, res) {
+  const eventId = req.query.eventId;
+
+  const { client, db } = await connectToDb("events");
 
   if (req.method === "POST") {
     const { email, name, text } = req.body;
@@ -17,15 +21,21 @@ function handler(req, res) {
     }
 
     const newComment = {
-      id: new Date().toISOString(),
       email,
       name,
       text,
+      eventId: eventId,
     };
 
-    console.log("new comment", newComment);
-    res.status(201).json({ message: "Added comment", comment: newComment });
-    return;
+    const result = await db
+      .collection("comments")
+      .insertOne({ comment: newComment });
+
+    console.log("new comment", result);
+
+    newComment.id = result.insertedId;
+
+    res.status(201).json({ message: "Added comment", comment: result });
   }
 
   if (req.method === "GET") {
@@ -38,8 +48,9 @@ function handler(req, res) {
     ];
 
     res.status(200).json({ comments: dummyComments });
-    return;
   }
+
+  client.close();
 }
 
 export default handler;
