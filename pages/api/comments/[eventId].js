@@ -1,5 +1,7 @@
 import { connectToDb } from "../../../helpers/mongodb-utils";
 
+const COLLECTION = "comments";
+
 async function handler(req, res) {
   const eventId = req.query.eventId;
 
@@ -28,7 +30,7 @@ async function handler(req, res) {
     };
 
     const result = await db
-      .collection("comments")
+      .collection(COLLECTION)
       .insertOne({ comment: newComment });
 
     console.log("new comment", result);
@@ -39,15 +41,13 @@ async function handler(req, res) {
   }
 
   if (req.method === "GET") {
-    const dummyComments = [
-      { id: "com1", name: "Gar", text: "Hello world!" },
-      { id: "com2", name: "Kumr", text: "Hello!" },
-      { id: "com3", name: "Tik", text: "World!" },
-      { id: "co4", name: "Tiwt", text: "Hello there!" },
-      { id: "co5", name: "Saloma", text: "There!" },
-    ];
+    const documents = await db
+      .collection(COLLECTION)
+      .find()
+      .sort({ _id: -1 })
+      .toArray();
 
-    res.status(200).json({ comments: dummyComments });
+    res.status(200).json({ comments: documents });
   }
 
   client.close();

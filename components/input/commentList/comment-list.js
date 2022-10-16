@@ -5,10 +5,10 @@ export default function CommentList(props) {
   return (
     <ul className={classes.comments}>
       {items.map((item) => (
-        <li key={item.id}>
-          <p>{item.text}</p>
+        <li key={item._id}>
+          <p>{item.comment.text}</p>
           <div>
-            By <address>{item.name}</address>
+            By <address>{item.comment.name}</address>
           </div>
         </li>
       ))}
